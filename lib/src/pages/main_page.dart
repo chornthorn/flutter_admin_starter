@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_admin/src/pages/book_list.dart';
 import 'package:flutter_web_admin/src/pages/notification_page.dart';
 import 'package:flutter_web_admin/src/widgets/adaptive_scaffold.dart';
-
+import 'package:animations/animations.dart';
 import 'account_page.dart';
 import 'course_page.dart';
 import 'home_page.dart';
@@ -35,11 +36,24 @@ class _MainPageState extends State<MainPage> {
           icon: Icons.notification_important_outlined,
         ),
         AdaptiveScaffoldDestination(
-          title: 'Settings',
+          title: 'Datatable',
           icon: Icons.settings_outlined,
         ),
       ],
-      body: _pageAtIndex(_pageIndex),
+      body: PageTransitionSwitcher(
+        transitionBuilder: (
+          Widget child,
+          Animation<double> primaryAnimation,
+          Animation<double> secondaryAnimation,
+        ) {
+          return FadeThroughTransition(
+            animation: primaryAnimation,
+            secondaryAnimation: secondaryAnimation,
+            child: child,
+          );
+        },
+        child: _pageAtIndex(_pageIndex),
+      ),
       onNavigationIndexChange: (newIndex) {
         setState(() {
           _pageIndex = newIndex;
@@ -73,6 +87,10 @@ class _MainPageState extends State<MainPage> {
 
     if (index == 2) {
       return NotificationPage();
+    }
+
+    if (index == 3) {
+      return DataTableDemo();
     }
 
     return Center(child: Text('Settings page'));
